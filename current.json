@@ -1,0 +1,9 @@
+{
+  "source": "https://www.vpnbook.com/freevpn/openvpn",
+  "username": "vpnbook",
+  "password": "",
+  "checked_at": "1970-01-01T00:00:00Z",
+  "server": "de20.vpnbook.com",
+  "protocol": "udp",
+  "port": 25000
+}
