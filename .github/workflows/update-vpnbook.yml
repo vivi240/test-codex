@@ -1,0 +1,31 @@
+name: Update VPNBook public password relay
+on:
+  schedule:
+    - cron: '17 */2 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: vpnbook-password-relay
+  cancel-in-progress: false
+jobs:
+  fetch-and-publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Fetch current VPNBook credentials
+        run: python3 relay/fetch_password.py
+      - name: Commit verified update
+        shell: bash
+        run: |
+          git add current.json
+          if git diff --cached --quiet; then
+            echo 'No update needed'
+            exit 0
+          fi
+          git config user.name 'vpnbook-relay-bot'
+          git config user.email 'vpnbook-relay-bot@users.noreply.github.com'
+          git commit -m 'Update public VPNBook credentials'
+          git push
